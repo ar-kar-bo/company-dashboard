@@ -51,7 +51,7 @@
                     <label for="dob" class="">Enter Date of Birth</label>
                 </div>
                 <div class="col-6">
-                    <input type="date"  name="dob" class="form-control" id="dob">
+                    <input type="date" value="2000-01-01" name="dob" class="form-control" id="dob" >
                 </div>
             </div>
             <div class="row align-items-center mt-3">

@@ -11,9 +11,9 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Department</th>
             <th>Name</th>
             <th>Salary</th>
+            <th>Department</th>
             <th>Option</th>
         </tr>
     </thead>
@@ -21,9 +21,9 @@
         @foreach ($positions as $p)
         <tr>
             <td>{{$p->id}}</td>
-            <td>{{$p->department->name}}</td>
             <td>{{$p->name}}</td>
             <td>{{$p->salary}}</td>
+            <td>{{$p->department->name}}</td>
             <td>
                 <a href="{{route('position.edit',$p->id)}}" class="badge bg-success">Edit</a>
                 <form action="{{route('position.destroy',$p->id)}}" method="post" class="d-inline" id="delete{{$p->id}}">

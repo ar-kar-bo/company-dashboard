@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <a href="{{route('employee.index')}}" class="btn btn-sm btn-primary">All Departments</a>
+        <a href="{{route('employee.index')}}" class="btn btn-sm btn-primary">All Employee</a>
 <form action="{{route('employee.update',$employee->id)}}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
