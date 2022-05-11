@@ -45,7 +45,7 @@ class EmployeeController extends Controller
             'email'=>'required',
             'phone'=>'required',
             'address'=>'required',
-            'image'=>'required|mimes:png,jpg,jpeg,JPG,ico',
+            'image'=>'required|mimes:png,jpg,jpeg,ico,svg',
             'dob'=>'required',
             'position_id'=>"required",
 
