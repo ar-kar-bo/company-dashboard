@@ -85,9 +85,10 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        $positions = Position::all();
+        $dep = Department::with('position')->get();
         $employee = Employee::where('id',$employee->id)->first();
-        return view('dashboard.employee.edit',compact('employee','positions'));
+        $dep_id = Position::with('department')->where('id',$employee->position_id)->first()->department_id;
+        return view('dashboard.employee.edit',compact('employee','dep','dep_id'));
     }
 
     /**
