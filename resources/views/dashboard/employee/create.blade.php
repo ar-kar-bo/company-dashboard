@@ -58,7 +58,7 @@
                 <div class="col-3">
                     <label for="department" class="">Department & Position</label>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <select name="department_id" class="form-select" id="department">
                         <option value="" hidden>Choose Department</option>
                         @foreach ($dep as $d)
@@ -66,7 +66,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-4">
+                <div class="col-3">
                     <select name="position_id" class="form-select" id="position">
                     </select>
                 </div>

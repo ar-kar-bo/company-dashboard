@@ -7,8 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="{{asset("css/imagehover.min.css")}}">
     <style>
+        [class^='imghvr-'],
+        [class*=' imghvr-'] {
+        background-color: #D14233;
+        }
         a{
             text-decoration: none;
         }
@@ -26,7 +30,7 @@
 
                 <div class="bg-secondary vh-100">
                     <ul class="text m-0 p-0">
-                        <a href="#">
+                        <a href="{{url('/')}}">
                             <li class="p-3 bg-primary text-white">
                                 Admin Management
                             </li>
@@ -44,6 +48,11 @@
                         <a href="{{route('employee.index')}}">
                             <li class="p-3 text-white">
                                 Employee
+                            </li>
+                        </a>
+                        <a href="{{route('employee.create')}}">
+                            <li class="p-3 text-white">
+                                Create Employee
                             </li>
                         </a>
                     </ul>

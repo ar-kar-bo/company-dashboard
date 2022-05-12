@@ -58,7 +58,7 @@
             <input type="date"  name="dob" class="form-control" id="dob" value="{{$employee->dob}}">
         </div>
     </div>
-    <div class="row align-items-center mt-3">
+    {{-- <div class="row align-items-center mt-3">
         <div class="col-3">
             <label for="position" class="">Choose Position</label>
         </div>
@@ -71,6 +71,26 @@
                 @endforeach
             </select>
         </div>
+    </div> --}}
+    <div class="row align-items-center mt-3">
+        <div class="col-3">
+            <label for="department" class="">Department & Position</label>
+        </div>
+        <div class="col-3">
+            <select name="department_id" class="form-select" id="department">
+                <option value="" hidden>Choose Department</option>
+                @foreach ($dep as $d)
+                    <option value="{{$d->id}}" @if ($d->id == $dep_id)
+                        selected
+                    @endif>{{$d->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-3">
+            <select name="position_id" class="form-select" id="position">
+            </select>
+        </div>
+        <div id="position_id"></div>
     </div>
     <div class="form-group mt-3">
         <input type="submit" value="Update" class="btn btn btn-dark">
@@ -79,3 +99,40 @@
     </div>
 </div>
 @endsection
+@section('script')
+<script>
+      function change() {
+                    let department_id = $("#department").val();
+                        if(department_id) {
+                            $.ajax({
+                                url: '/getPosition/'+department_id,
+                                type: "GET",
+                                data : {"_token":"{{ csrf_token() }}"},
+                                dataType: "json",
+                                success:function(data)
+                                {
+                                    if(data){
+                                        $('#position').empty();
+                                        $('#position').append('<option hidden>Choose Position</option>');
+                                        $.each(data, function(key , position){
+                                            let selected = (<?php echo $employee->position_id; ?> == position.id)?"selected":"";
+                                            $('#position').append('<option value="'+ position.id +'" '+selected+'>' + position.name + '</option>');
+                                        });
+                                    }else{
+                                        $('#position').empty();
+                                    }
+                                }
+                            });
+                        }else{
+                            $('#position').empty();
+                        }
+            }
+    $(document).ready(function() {
+            change();
+            $('#department').on("change",function(){
+                change();
+            });
+        });
+    </script>
+@endsection
+
