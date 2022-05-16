@@ -19,11 +19,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[PageController::class,'index']);
+Route::get('/employee_list/search', [PageController::class,'search']);
+Route::get('/employee_list/department/{department_id}',[PageController::class,'byDepartment']);
+Route::get('/employee_edit/eduction/{education_id}',[PageController::class,'destoryEducation']);
+Route::get('/employee_edit/department/{department_id}',[PageController::class,'destoryWorkHistory']);
+
 Route::resource("department", DepartmentController::class);
 Route::resource("position", PositionController::class);
 Route::resource("employee",EmployeeController::class);
 
-Route::get('/getPosition/{id}',function($id){
-    $position = Position::where('department_id',$id)->get();
+Route::get('/getPosition/{department_id}',function($department_id){
+    $position = Position::where('department_id',$department_id)->get();
     return response()->json($position);
 });
+

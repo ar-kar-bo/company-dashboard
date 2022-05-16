@@ -1,8 +1,8 @@
 @extends('dashboard.layout.master')
 @section('content')
-<div class="card">
+<div class="card mt-5 mx-4">
     <div class="card-header">
-        <h4>Category</h4>
+        <h4>Department Lists</h4>
         <a href="{{route('department.create')}}" class="btn btn-sm btn-primary">Create Department</a>
 
     </div>
