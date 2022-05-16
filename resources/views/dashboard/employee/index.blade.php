@@ -1,56 +1,102 @@
 @extends('dashboard.layout.master')
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <h4>Employee</h4>
-        <a href="{{route('employee.create')}}" class="btn btn-sm btn-primary">Create Employee</a>
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <h4 class="css-box">Employee Lists</h4>
+        </div>
+    </div>
+    <div class="row mt-3 justify-content-between">
+        <div class="col-4">
+            <label for="search" class="form-label">Search</label>
+            <form method="get" action="{{url('/employee_list/search')}}">
+                <div class="input-group">
+                    <input name="search" class="form-control" type="search" placeholder="Search" aria-label="Search" id="search">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-4">
+            <label for="Department" class="form-label">Department</label>
+            <select name="department_id" id="" class="form-select dep">
+                <option value="" hidden>Choose Department</option>
+                @foreach ($department as $d)
+                    <option value="{{$d->id}}"><a href="{{url("/employee_list/department/".$d->id)}}">{{$d->name}}</a></option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="row mt-5 show-data">
+        @foreach ($employees as $employee )
+            <div class="col-2">
+                <div class="card card-box" >
+                    <figure class="imghvr-zoom-in bg-light">
+                        <img src="{{asset($employee->photo)}}" class="card-img-top img-fluid imghvr-zoom-in bg-light text-black-50" style="height: 135px;" alt="empty image">
+                        <figcaption class="bg-opacity-50 bg-black pt-5 text-center">
+                                    <div class="btn btn-info text-light"><a href="{{route('employee.edit',$employee->id)}}" class="badge"><i class="fa-solid fa-pen-to-square"></i></a></div>
+                                    <div class="btn btn-info text-light"><a href="{{route('employee.show',$employee->id)}}" class="badge"><i class="fa-solid fa-eye"></i></a></div>
+
+                        </figcaption>
+                    </figure>
+                    <div class="card-body text-center">
+                    <h6>{{$employee->name}}</h6>
+                    <span class="badge bg-success w-75">{{$employee->position->name}}</span><br>
+                    <a class="btn btn-info btn-sm w-100 mt-1 text-light">{{$employee->position->name}}</a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+
 
     </div>
-    <div class="card-body">
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Photo</th>
-            <th>Date of Birth</th>
-            <th>Position</th>
-            <th>Option</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($employees as $e)
-        <tr>
-            <td>{{$e->id}}</td>
-            <td>{{$e->name}}</td>
-            <td>{{$e->email}}</td>
-            <td>{{$e->phone}}</td>
-            <td>{{$e->address}}</td>
-            <td>
-                <img src="{{asset($e->photo)}}" style="width: 40px;" alt="" srcset="">
-            </td>
-            <td>{{$e->dob}}</td>
-            <td>{{$e->position->name}}</td>
-            <td>
-                <a href="{{route('employee.edit',$e->id)}}" class="badge bg-success">Edit</a>
-                <form action="{{route('employee.destroy',$e->id)}}" method="post" class="d-inline" id="delete{{$e->id}}">
-                @csrf
-                @method('DELETE')
-                    <a href="#{{$e->id}}" onclick="confirm('Delete?')? document.getElementById('delete{{$e->id}}').submit():false;" class="badge bg-danger">Delete</a>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+</div>
+@endsection
+
+@section('script')
+<script>
+$('.dep').on('change',function(){
+    let department_id = $(this).val();
+    if(department_id) {
+        $.ajax({
+            url: '/employee_list/department/'+department_id,
+            type: "GET",
+            data : {"_token":"{{ csrf_token() }}"},
+            dataType: "json",
+            success:function(data)
+                    {
+                        if(data){
+                            $('.show-data').empty();
+
+                            $.each(data, function(key , employee){
+                                $('.show-data').append(`
+<div class="col-2">
+    <div class="card card-box" >
+        <figure class="imghvr-zoom-in bg-light">
+            <img src="`+employee.photo+`" class="card-img-top img-fluid imghvr-zoom-in bg-light text-black-50" style="height: 135px;" alt="empty image">
+            <figcaption class="bg-opacity-50 bg-black pt-5 text-center">
+                        <div class="btn btn-info text-light"><a href="employee/`+employee.id+`/edit" class="badge"><i class="fa-solid fa-pen-to-square"></i></a></div>
+                        <div class="btn btn-info text-light"><a href="employee/`+employee.id+`/show" class="badge"><i class="fa-solid fa-eye"></i></a></div>
+
+            </figcaption>
+        </figure>
+        <div class="card-body text-center">
+        <h6>`+employee.name+`</h6>
+        <span class="badge bg-success w-75">`+employee.position.name+`</span><br>
+        <a class="btn btn-info btn-sm w-100 mt-1 text-light">`+employee.position.name+`</a>
+        </div>
     </div>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-12"></div>
-    </div>
-</div>
+                                `);
+                            });
+                        }else{
+                            $('.show-data').empty();
+                        }
+                    }
+        });
+    }
+});
+
+</script>
 @endsection

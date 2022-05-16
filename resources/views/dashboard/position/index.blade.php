@@ -1,6 +1,6 @@
 @extends('dashboard.layout.master')
 @section('content')
-<div class="card">
+<div class="card mx-4 mt-5">
     <div class="card-header">
         <h4>Position</h4>
         <a href="{{route('position.create')}}" class="btn btn-sm btn-primary">Create Position</a>

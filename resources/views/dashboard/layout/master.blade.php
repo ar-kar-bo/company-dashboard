@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset("css/imagehover.min.css")}}">
     <style>
@@ -19,6 +20,10 @@
         ul li{
             list-style-type: none;
         }
+        .card-box:hover{
+			transform: scale(1.005);
+			box-shadow: 0 0 40px 0px rgba(0,0,0,0.25)
+		}
     </style>
 </head>
 
@@ -32,26 +37,31 @@
                     <ul class="text m-0 p-0">
                         <a href="{{url('/')}}">
                             <li class="p-3 bg-primary text-white">
+                                <i class="fa-solid fa-house"></i>
                                 Admin Management
                             </li>
                         </a>
                         <a href="{{route('department.index')}}">
                             <li class="p-3 text-white">
+                                <i class="fa-solid fa-building-user"></i>
                                 Department
                             </li>
                         </a>
                         <a href="{{route('position.index')}}">
                             <li class="p-3  text-white">
+                                <i class="fa-solid fa-id-card-clip"></i>
                                 Position
                             </li>
                         </a>
                         <a href="{{route('employee.index')}}">
                             <li class="p-3 text-white">
+                                <i class="fa-solid fa-users-gear"></i>
                                 Employee
                             </li>
                         </a>
                         <a href="{{route('employee.create')}}">
                             <li class="p-3 text-white">
+                                <i class="fa-solid fa-user-plus"></i>
                                 Create Employee
                             </li>
                         </a>

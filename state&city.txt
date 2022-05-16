@@ -1,0 +1,90 @@
+001 Bogale 083 Demoso 084 Hpasawng Rakhine State 251 Mabein
+002 Danubyu 085 Hpruso 167 Ann 252 Manton
+003 Dedaye 086 Loikaw 168 Buthidaung 253 Matman
+004 Einme 087 Mese 169 Gwa 254 Mongmao
+005 Hinthada 088 Shadaw 170 Kyaukpyu 255 Mongmit
+006 Ingapu 171 Kyauktaw 256 Mongyai
+007 Kangyidaunt 089 Hlaingbwe 172 Maungdaw 257 Muse
+008 Kyaiklat 090 Hpa-An 173 Minbya 258 Namhkan
+009 Kyangin 091 Hpapun 174 Mrauk-U 259 Namhsan
+010 Kyaunggon 092 Kawkareik 175 Munaung 260 Namtu
+011 Kyonpyaw 093 Kyainseikgyi 176 Myebon 261 Narphan
+012 Labutta 094 Myawaddy 177 Pauktaw 262 Nawnghkio
+013 Lemyethna 095 Thandaunggyi 178 Ponnagyun 263 Pangsang
+014 Maubin 179 Ramree 264 Pangwaun
+015 Mawlamyinegyun 096 Aunglan 180 Rathedaung 265 Tangyan
+016 Myanaung 097 Chauk 181 Sittwe Shan State (East)
+017 Myaungmya 098 Gangaw 182 Thandwe 266 Kengtung
+018 Ngapudaw 099 Kamma 183 Toungup 267 Monghpyak
+019 Nyaungdon 100 Magway Sagaing Region 268 Monghsat
+020 Pantanaw 101 Minbu 184 Ayadaw 269 Mongkhet
+021 Pathein 102 Mindon 185 Banmauk 270 Mongla
+022 Pyapon 103 Minhla 186 Budalin 271 Mongping
+023 Thabaung 104 Myaing 187 Chaung-U 272 Mongton
+024 Wakema 105 Myothit 188 Hkamti 273 Mongyang
+025 Yegyi 106 Natmauk 189 Homalin 274 Mongyawng
+026 Zalun 107 Ngape 190 Indaw 275 Tachileik
+Bago Region (East) 108 Pakokku 191 Kale Tanintharyi Region
+027 Bago 109 Pauk 192 Kalewa 276 Bokpyin
+028 Daik-U 110 Pwintbyu 193 Kanbalu 277 Dawei
+029 Htantabin 111 Salin 194 Kani 278 Kawthoung
+030 Kawa 112 Saw 195 Katha 279 Kyunsu
+031 Kyaukkyi 113 Seikphyu 196 Kawlin 280 Launglon
+032 Kyauktaga 114 Sidoktaya 197 Khin-U 281 Myeik
+033 Nyaunglebin 115 Sinbaungwe 198 Kyunhla 282 Palaw
+034 Oktwin 116 Taungdwingyi 199 Lahe 283 Tanintharyi
+035 Phyu 117 Thayet 200 Lay Shi 284 Thayetchaung
+036 Shwegyin 118 Tilin 201 Mawlaik 285 Yebyu
+037 Taungoo 119 Yenangyaung 202 Mingin Yangon Region
+038 Thanatpin 120 Yesagyo 203 Monywa 286 Ahlone
+039 Waw 204 Myaung 287 Bahan
+040 Yedashe 121 Amarapura 205 Myinmu 288 Botahtaung
+Bago Region (West) 122 Aungmyaythazan 206 Nanyun 289 Cocokyun
+041 Gyobingauk 123 Chanayethazan 207 Pale 290 Dagon
+042 Letpadan 124 Chanmyathazi 208 Paungbyin 291 Dagon Myothit (East)
+043 Minhla 125 Kyaukpadaung 209 Pinlebu 292 Dagon Myothit (North)
+044 Monyo 126 Kyaukse 210 Sagaing 293 Dagon Myothit (Seikkan)
+045 Nattalin 127 Madaya 211 Salingyi 294 Dagon Myothit (South)
+046 Okpho 128 Mahaaungmyay 212 Shwebo 295 Dala
+047 Padaung 129 Mahlaing 213 Tabayin 296 Dawbon
+048 Paukkhaung 130 Meiktila 214 Tamu 297 Hlaing
+049 Paungde 131 Mogoke 215 Taze 298 Hlaingtharya (East)
+050 Pyay 132 Myingyan 216 Tigyaing 299 Hlaingtharya (West)
+051 Shwedaung 133 Myittha 217 Wetlet 300 Hlegu
+052 Thayarwady 134 Natogyi 218 Wuntho 301 Hmawbi
+053 Thegon 135 Ngazun 219 Ye-U 302 Htantabin
+054 Zigon 136 Nyaung-U 220 Yinmarbin 303 Insein
+Chin State 137 Patheingyi Shan State (South) 304 Kamaryut
+055 Falam 138 Pyawbwe 221 Hopong 305 Kawhmu
+056 Hakha 139 Pyigyitagon 222 Hsihseng 306 Kayan
+057 Kanpetlet 140 Pyinoolwin 223 Kalaw 307 Kungyangon
+058 Matupi 141 Singu 224 Kunhing 308 Kyauktada
+059 Mindat 142 Sintgaing 225 Kyethi 309 Kyauktan
+060 Paletwa 143 Tada-U 226 Laihka 310 Kyeemyindaing
+061 Tedim 144 Taungtha 227 Langkho 311 Lanmadaw
+062 Thantlang 145 Thabeikkyin 228 Lawksawk 312 Latha
+063 Tonzang 146 Thazi 229 Loilen 313 Mayangone
+Kachin State 147 Wundwin 230 Mawkmai 314 Mingaladon
+064 Bhamo 148 Yamethin 231 Monghsu 315 Mingalartaungnyunt
+065 Chipwi 232 Mongkaing 316 North Okkalapa
+066 Hpakant 149 Bilin 233 Mongnai 317 Pabedan
+067 Injangyang 150 Chaungzon 234 Mongpan 318 Pazundaung
+068 Khaunglanhpu 151 Kyaikmaraw 235 Nansang 319 Sanchaung
+069 Machanbaw 152 Kyaikto 236 Nyaungshwe 320 Seikgyikanaungto
+070 Mansi 153 Mawlamyine 237 Pekon 321 Shwepyithar
+071 Mogaung 154 Mudon 238 Pindaya 322 South Okkalapa
+072 Mohnyin 155 Paung 239 Pinlaung 323 Taikkyi
+073 Momauk 156 Thanbyuzayat 240 Taunggyi 324 Tamwe
+074 Myitkyina 157 Thaton 241 Ywangan 325 Thaketa
+075 Nawngmun 158 Ye Shan State (North) 326 Thanlyin
+076 Puta-O 242 Hopang 327 Thingangyun
+077 Shwegu 159 Det Khi Na Thi Ri 243 Hseni 328 Thongwa
+078 Sumprabum 160 Lewe 244 Hsipaw 329 Twantay
+079 Tanai 161 Oke Ta Ra Thi Ri 245 Konkyan 330 Yankin
+080 Tsawlaw 162 Poke Ba Thi Ri 246 Kunlong
+081 Waingmaw 163 Pyinmana 247 Kutkai
+Kayah State 164 Tatkon 248 Kyaukme
+082 Bawlake 165 Za Bu Thi Ri 249 Lashio
+
+
+
