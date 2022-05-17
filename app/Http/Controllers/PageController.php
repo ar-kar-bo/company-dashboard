@@ -26,15 +26,13 @@ class PageController extends Controller
 
     public function byDepartment($department_id)
     {
-        $department = Department::all();
         $employees = Department::with('employee')->where('id',$department_id)->first()->employee;
         for($i=0;$i<count($employees);$i++)
         {
-            $position =  Position::where('id',$employees[$i]->id)->first();
+            $position =  Position::where('id',$employees[$i]->position_id)->first();
             $employees[$i]->position = $position;
         }
         return response()->json($employees);
-        // return view('dashboard.employee.index',compact('employees','department'));
     }
 
     public function destoryEducation($education_id)

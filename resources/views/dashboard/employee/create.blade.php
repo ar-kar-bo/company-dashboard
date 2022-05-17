@@ -48,7 +48,7 @@
                     <label for="phone" class="">Enter Employee Ph.no</label>
                 </div>
                 <div class="col-3">
-                    <input type="number" name="phone" class="form-control" id="phone">
+                    <input type="text" name="phone" class="form-control" id="phone">
                 </div>
             </div>
             <div class="row align-items-center mt-3">
@@ -57,25 +57,12 @@
                 </div>
                 <div class="col-3">
                     <select name="state" id="state" class="form-select">
-                        <option value="" hidden>Choose State / Region</option>
-                        <option value="Ayeyarwady Region">Ayeyarwady Region</option>
-                        <option value="Bago Region(East)">Bago Region(East)</option>
-                        <option value="Bago Region(West)">Bago Region(West)</option>
-                        <option value="Chin State">Chin State</option>
-                        <option value="Kachin State">Kachin State</option>
-                        <option value="Kayah State">Kayah State</option>
-                        <option value="Kayin State">Kayin State</option>
-                        <option value="Magway Region">Magway Region</option>
-                        <option value="Mandalay Region">Mandalay Region</option>
-                        <option value="Mon State">Mon State</option>
-                        <option value="Nay Pyi Taw">Nay Pyi Taw</option>
-                        <option value="Rakhine State">Rakhine State</option>
-                        <option value="Sagaing Region">Sagaing Region</option>
-                        <option value="Shan State(South)">Shan State(South)</option>
-                        <option value="Shan State(North)">Shan State(North)</option>
-                        <option value="Shan State(East)">Shan State(East)</option>
-                        <option value="Tanintharyi Region">Tanintharyi Region</option>
-                        <option value="Yangon Region">Yangon Region</option>
+                        <option value="state" hidden>Choose State</option>
+                        @foreach ($states as $state)
+                            <option value="{{$state->id}}">{{$state->name}}</option>
+                        @endforeach
+
+
                     </select>
                 </div>
             </div>
@@ -84,7 +71,7 @@
                     <label for="city" class="">City </label>
                 </div>
                 <div class="col-3">
-                    <select name="ciry" id="city" class="form-select">
+                    <select name="city" id="city" class="form-select">
 
                     </select>
                 </div>
@@ -113,6 +100,15 @@
                 </div>
                 <div class="col-3">
                     <input type="date" value="2000-01-01" name="dob" class="form-control" id="dob" >
+                </div>
+            </div>
+
+            <div class="row align-items-center mt-3">
+                <div class="col-2">
+                    <label for="skill" class="">Enter Employee Skill</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" name="skill" class="form-control" id="skill" >
                 </div>
             </div>
 
@@ -242,174 +238,37 @@
             }
         });
         $('#state').on('change', function() {
-            let state = $(this).val();
-            if(state) {
-                let data = {
-    "Ayeyarwady Region"=>[
-        'Bogale',
-        'Danubyu',
-        'Dedaye',
-        'Einme',
-        'Hinthada',
-    ],
-    "Bago Region(East)"=>[
-        'Bago',
-        'Daik-U',
-        'Htantabin',
-        'Kawa',
-        'Kyaukkyi',
-    ],
-    "Bago Region(West)"=>[
-        'Gyobingauk',
-        'Letpadan',
-        'Minhla',
-        'Monyo',
-        'Nattalin',
-    ],
-    "Chin State"=>[
-        'Falam',
-        'Hakha',
-        'Kanpetlet',
-        'Matupi',
-        'Mindat',
-    ],
-    "Kachin State"=>[
-        'Bhamo',
-        'Hpakant',
-        'Mohnyin',
-        'Mogaung',
-        'Myitkyina',
-    ],
-    "Kayah State"=>[
-        'Bawlake',
-        'Hpasawng',
-        'Loikaw',
-        'Demoso',
-        'Hpruso',
-    ],
-    "Kayin State"=>[
-        'Hlaingbwe',
-        'Hpa-An',
-        'Hpapun',
-        'Kawkareik',
-        'Kyainseikgyi',
-    ],
-    "Magway Region"=>[
-        'Aunglan',
-        'Minbu',
-        'Myaing',
-        'Myothit',
-        'Pakokku',
-    ],
-    "Mandalay Region"=>[
-        'Amarapura',
-        'Aungmyaythazan',
-        'Chanayethazan',
-        'Chanmyathazi',
-        'Meiktila',
-    ],
-    "Mon State"=>[
-        'Bilin',
-        'Chaungzon',
-        'Kyaikmaraw',
-        'Kyaikto',
-        'Mawlamyine',
-    ],
-    "Nay Pyi Taw"=>[
-        'Lewe',
-        'Det Khi Na Thi Ri',
-        'Oke Ta Ra Thi Ri',
-        'Poke Ba Thi Ri',
-        'Pyinmana',
-    ],
-    "Rakhine State"=>[
-        'Ann',
-        'Buthidaung',
-        'Gwa',
-        'Kyaukpyu',
-        'Kyauktaw',
-    ],
-    "Sagaing Region"=>[
-        'Ayadaw',
-        'Banmauk',
-        'Budalin',
-        'Chaung-U',
-        'Hkamti',
-    ],
-    "Shan State(South)"=>[
-        'Hopong',
-        'Hsihseng',
-        'Kalaw',
-        'Kunhing',
-        'Kyethi',
-    ],
-    "Shan State(North)"=>[
-        'Hopang',
-        'Hseni',
-        'Hsipaw',
-        'Konkyan',
-        'Kunlong',
-    ],
-    "Shan State(East)"=>[
-        'Kengtung',
-        'Monghpyak',
-        'Monghsat',
-        'Mongkhet',
-        'Mongla',
-    ],
-    "Tanintharyi Region"=>[
-        'Bokpyin',
-        'Dawei',
-        'Kawthoung',
-        'Kyunsu',
-        'Launglon',
-        'Myeik',
-        'Palaw',
-        'Tanintharyi',
-        'Thayetchaung',
-        'Yebyu',
-    ],
-    "Yangon Region"=>[
-        'Ahlone',
-        'Bahan',
-        'Botahtaung',
-        'Cocokyun',
-        'Dagon',
-        'Dagon Myothit (East)',
-        'Dagon Myothit (North)',
-        'Dagon Myothit (Seikkan)',
-        'Dagon Myothit (South)',
-        'Dala',
-        'Dawbon',
-        'Hlaing',
-        'Hlaingtharya (East)',
-        'Hlaingtharya (West)',
-        'Hlegu',
-        'Hmawbi',
-        'Htantabin',
-        'Insein',
-        'Kamaryut',
-        'Kawhmu',
-        'Kayan',
-        'Kungyangon',
-    ],
-                };
-
-let city = data.state;
-                if(city){
-                    $('#city').empty();
-                    $('#city').append('<option hidden>Choose City</option>');
-                    $.each(city, function(key , name){
-                        $('#city').append('<option value="'+ name +'">' + name + '</option>');
-                    });
-                }else{
-                    $('#city').empty();
-                }
+            let state_id = $(this).val();
+            if(state_id) {
+                $.ajax({
+                    url: '/getCity/'+state_id,
+                    type: "GET",
+                    data : {"_token":"{{ csrf_token() }}"},
+                    dataType: "json",
+                    success:function(data)
+                    {
+                        if(data){
+                            $('#city').empty();
+                            $('#city').append('<option hidden>Choose City</option>');
+                            $.each(data, function(key , city){
+                                $('#city').append('<option value="'+ city.id +'">' + city.name + '</option>');
+                            });
+                        }else{
+                            $('#city').empty();
+                        }
+                    }
+                });
             }else{
                 $('#city').empty();
             }
         });
     });
+
+
+
+
+
+
 
     $("#newWorkHistory").click(function(){
         $(".workhistory").append(`

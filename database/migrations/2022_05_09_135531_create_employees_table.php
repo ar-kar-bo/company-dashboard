@@ -18,9 +18,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('phone');
+            $table->string('state');
+            $table->string('city');
             $table->string('address');
             $table->string('photo');
             $table->date('dob');
+            $table->string('skill');
             $table->unsignedBigInteger('position_id');
 
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
