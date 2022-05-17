@@ -51,7 +51,7 @@
                     <p>Region / State :</p>
                 </div>
                 <div class="col-3">
-                    <h6></h6>
+                    <h6>{{$employee->state}}</h6>
                 </div>
             </div>
             <div class="row align-items-center mt-3">
@@ -59,7 +59,7 @@
                     <p>City :</p>
                 </div>
                 <div class="col-3">
-                    <h6></h6>
+                    <h6>{{$employee->city}}</h6>
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                     <p>Photo :</p>
                 </div>
                 <div class="col-3">
-                    <img src="{{asset($employee->photo)}}" style="width: 100px;hight:100px;border-radius:50%;" alt="" srcset="">
+                    <img src="{{asset($employee->photo)}}" style="width: 100px;height:100px;border-radius:50px;" alt="" srcset="">
                 </div>
             </div>
 

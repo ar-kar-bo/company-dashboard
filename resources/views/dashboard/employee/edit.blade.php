@@ -52,7 +52,7 @@
                     <label for="phone" class="">Enter Employee Ph.no</label>
                 </div>
                 <div class="col-3">
-                    <input type="number" name="phone" value="{{$employee->phone}}" class="form-control" id="phone">
+                    <input type="text" name="phone" value="{{$employee->phone}}" class="form-control" id="phone">
                 </div>
             </div>
             <div class="row align-items-center mt-3">
@@ -61,69 +61,29 @@
                 </div>
                 <div class="col-3">
                     <select name="state" id="state" class="form-select">
-                        <option value="" hidden>Choose State / Region</option>
-                        <option value="1">Kachin State</option>
-                        <option value="2">Kayah State</option>
-                        <option value="3">Kayin State</option>
-                        <option value="4">Chin State</option>
-                        <option value="5">Sagaing Region</option>
-                        <option value="6">Tanintharyi Region</option>
-                        <option value="7">Bago Region</option>
-                        <option value="8">Magway Region</option>
-                        <option value="9">Mandalay Region</option>
-                        <option value="10">Mon State</option>
-                        <option value="11">Ayeyarwady Region</option>
-                        <option value="12">Shan State</option>
-                        <option value="13">Yangon Region</option>
-                        <option value="14">Rakhine State</option>
+                        <option value="" hidden>Choose State</option>
+                        @foreach ($states as $state)
+                            <option value="{{$state->id}}" @if ($state->id == $employee->state_id)
+                                selected
+                            @endif > {{$state->name}}</option>
+                        @endforeach
+
+
                     </select>
                 </div>
             </div>
-            
+
             <div class="row align-items-center mt-3">
                 <div class="col-2">
-                    <label for="city" class="">City </label>
+                    <label for="city" class="">City</label>
                 </div>
                 <div class="col-3">
-                    <select name="ciry" id="ciry" class="form-select">
-                        <option value="" hidden>Choose City</option>
-                        <option value="">Ahlon</option>
-                        <option value="">Bahan</option>
-                        <option value="">Hlaing</option>
-                        <option value="">Kyauktada</option>
-                        <option value="">Lanmadaw</option>
-                        <option value="">Latha</option>
-                        <option value="">Mayangon</option>
-                        <option value="">Pabedan</option>
-                        <option value="">Sanchaung</option>
-
-                        <option value="">Botataung</option>
-                        <option value="">Dagon Seikkan</option>
-                        <option value="">Dawbon</option>
-                        <option value="">Mingala Taungnyunt</option>
-                        <option value="">New Dagon East</option>
-                        <option value="">New Dagon Noth</option>
-                        <option value="">New Dagon South</option>
-                        <option value="">Noth Okkalapa</option>
-                        <option value="">Pazundaung</option>
-                        <option value="">South Okkalapa</option>
-                        <option value="">Tamwe</option>
-                        <option value="">Thaketa</option>
-                        <option value="">Thingangyun</option>
-                        <option value="">Yankin</option>
-
-                        <option value="">Dala</option>
-                        <option value="">Seikkyi Kanaungto</option>
-
-                        <option value="">Insein</option>
-                        <option value="">Hlaingthaya</option>
-                        <option value="">Mingaladon</option>
-                        <option value="">Shwepyitha</option>
-
+                    <select name="city" id="city" class="form-select">
 
                     </select>
                 </div>
             </div>
+
 
             <div class="row align-items-top mt-3">
                 <div class="col-2">
@@ -151,6 +111,14 @@
                 </div>
                 <div class="col-3">
                     <input type="date" name="dob" class="form-control" id="dob" value="{{$employee->dob}}">
+                </div>
+            </div>
+            <div class="row align-items-center mt-3">
+                <div class="col-2">
+                    <label for="skill" class="">Enter Employee Skill</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" value="{{$employee->skill}}" name="skill" class="form-control" id="skill" >
                 </div>
             </div>
 
@@ -307,7 +275,40 @@ function change() {
                 change();
             });
         });
+        function changeCity() {
+                    let state_id = $("#state").val();
+                        if(state_id) {
+                            $.ajax({
+                                url: '/getCity/'+state_id,
+                                type: "GET",
+                                data : {"_token":"{{ csrf_token() }}"},
+                                dataType: "json",
+                                success:function(data)
+                                {
 
+                                    if(data){
+                                        $('#city').empty();
+                                        $('#city').append('<option hidden>Choose City</option>');
+                                        $.each(data, function(key , city){
+                                            let selected = (<?php echo $employee->city_id ?> == city.id)?"selected":"";
+                                            $('#city').append('<option value="'+ city.id +'"'+selected+' >' + city.name + '</option>');
+                                        });
+                                    }else{
+                                        $('#city').empty();
+
+                                    }
+                                }
+                            });
+                        }else{
+                            $('#city').empty();
+                        }
+            }
+    $(document).ready(function() {
+            changeCity();
+            $('#state').on("change",function(){
+                changeCity();
+            });
+        });
     $("#newWorkHistory").click(function(){
         $(".workhistory").append(`
             <div id="anotherWorkHistory">

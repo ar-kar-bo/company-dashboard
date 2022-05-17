@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Department;
 use App\Models\Education;
 use App\Models\Employee;
 use App\Models\Position;
+use App\Models\State;
 use App\Models\WorkHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -32,8 +34,9 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $dep = Department::with('position')->get();
-        return view('dashboard.employee.create',compact('dep'));
+        $states = State::all();
+        $dep = Department::all();
+        return view('dashboard.employee.create',compact('dep','states'));
     }
 
     /**
@@ -67,12 +70,16 @@ class EmployeeController extends Controller
             'name'=>'required',
             'email'=>'required',
             'phone'=>'required',
+            'state'=>'required',
+            'city'=>'required',
             'address'=>'required',
             'image'=>'required|mimes:png,jpg,jpeg,ico,svg',
             'dob'=>'required',
             'position_id'=>"required",
 
         ]);
+        $state = State::find($request->state)->name;
+        $city = City::find($request->city)->name;
 
         $file = $request->file('image');
         $file_name = uniqid(time()).$file->getClientOriginalName();
@@ -82,10 +89,13 @@ class EmployeeController extends Controller
             'name'=>$request->name,
             'email'=>$request->email,
             'phone'=>$request->phone,
+            'state'=>$state,
+            'city'=>$city,
             'address'=>$request->address,
             'photo'=>$file_path,
             'dob'=>$request->dob,
             'position_id'=>$request->position_id,
+            'skill'=>$request->skill
         ]);
 
 
@@ -103,13 +113,13 @@ class EmployeeController extends Controller
                     'description'  =>  $request->work_history_description[$i]
                 ]);
             }else{
-                $bug = new stdClass();
-                $bug->wh_position = $request->work_history_position[$i];
-                $bug->wh_company_name = $request->work_history_company_name[$i];
-                $bug->wh_start_date = $request->work_history_start_date[$i];
-                $bug->wh_end_date = $request->work_history_end_date[$i];
-                $bug->wh_description      =   $request->work_history_description[$i];
-                return $bug;
+                // $bug = new stdClass();
+                // $bug->wh_position = $request->work_history_position[$i];
+                // $bug->wh_company_name = $request->work_history_company_name[$i];
+                // $bug->wh_start_date = $request->work_history_start_date[$i];
+                // $bug->wh_end_date = $request->work_history_end_date[$i];
+                // $bug->wh_description      =   $request->work_history_description[$i];
+                return redirect()->back()->with('warning','Fill WorkHistory Form To Complete!');
             }
         }
 
@@ -126,13 +136,13 @@ class EmployeeController extends Controller
                     'note'          =>  $request->edu_note[$i]
                 ]);
             }else{
-                $bug = new stdClass();
-                $bug->edu_school = $request->edu_school[$i];
-                $bug->edu_degree = $request->edu_degree[$i];
-                $bug->edu_start_date = $request->edu_start_date[$i];
-                $bug->edu_end_date = $request->edu_end_date[$i];
-                $bug->edu_note      =   $request->edu_note[$i];
-                return $bug;
+                // $bug = new stdClass();
+                // $bug->edu_school = $request->edu_school[$i];
+                // $bug->edu_degree = $request->edu_degree[$i];
+                // $bug->edu_start_date = $request->edu_start_date[$i];
+                // $bug->edu_end_date = $request->edu_end_date[$i];
+                // $bug->edu_note      =   $request->edu_note[$i];
+                return redirect()->back()->with('warning','Fill Education Form To Complete!');
             }
         }
 
@@ -167,13 +177,16 @@ class EmployeeController extends Controller
     public function edit(Employee $employee)
     {
         $dep = Department::with('position')->get();
+        $states = State::all();
 
         $employee = Employee::where('id',$employee->id)->first();
         $employee->work_history = WorkHistory::where('employee_id',$employee->id)->get();
         $employee->education = Education::where('employee_id',$employee->id)->get();
+        $employee->city_id = City::where('name',$employee->city)->first()->id;
+        $employee->state_id = State::where('name',$employee->state)->first()->id;
 
         $dep_id = Position::with('department')->where('id',$employee->position_id)->first()->department_id;
-        return view('dashboard.employee.edit',compact('employee','dep','dep_id'));
+        return view('dashboard.employee.edit',compact('employee','dep','dep_id','states'));
     }
 
     /**
@@ -244,6 +257,7 @@ class EmployeeController extends Controller
             'image'=>'mimes:png,jpg,jpeg,ico',
             'dob'=>'required',
             'position_id'=>"required",
+            'skill'=>'required'
 
         ]);
         $employee = Employee::find($employee->id);
@@ -263,10 +277,13 @@ class EmployeeController extends Controller
             'name'=>$request->name,
             'email'=>$request->email,
             'phone'=>$request->phone,
+            'state'=>$request->state,
+            'city'=>$request->city,
             'address'=>$request->address,
             'photo'=>$file_path,
             'dob'=>$request->dob,
             'position_id'=>$request->position_id,
+            'skill'=>$request->skill,
         ]);
         return redirect()->back()->with('success','Employee Updated Success!');
     }
