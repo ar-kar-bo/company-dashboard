@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use App\Http\Controllers\Controller;
 class DepartmentController extends Controller
 {
     /**
@@ -16,7 +16,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $departments = Department::all();
-        return view('dashboard.department.index',compact('departments'));
+        return response()->json($departments);
     }
 
     /**
@@ -26,7 +26,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('dashboard.department.create');
+        //
     }
 
     /**
@@ -52,9 +52,9 @@ class DepartmentController extends Controller
             $result = $department->save();
             if($result)
             {
-                return redirect(route('department.index'))->with('success','Department Created Success!');
+                return ['result'=>'Department Created Success!'];
             }else{
-                return redirect(route('department.index'))->with('warning','Department Creation has been failed!');
+                return ['result'=>'Department create operation has been failed!'];
             }
         }
 
@@ -69,7 +69,8 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        $department = Department::find($department->id);
+        return response()->json($department);
     }
 
     /**
@@ -81,7 +82,7 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::find($id);
-        return view('dashboard.department.edit',compact('department'));
+        return response()->json($department);
     }
 
     /**
@@ -106,9 +107,9 @@ class DepartmentController extends Controller
             $result = $department->save();
             if($result)
             {
-                return redirect()->back()->with('success','Department Updated Success!');
+                return ['result'=>"Department Updated Success!"];
             }else{
-                return redirect()->back()->with('warning','Department Update failed!');
+                return ['result'=>'Update Operation has been failed!'];
             }
         }
     }
@@ -122,6 +123,6 @@ class DepartmentController extends Controller
     public function destroy($id)
     {
         Department::where('id',$id)->delete();
-        return redirect()->back()->with('success','Department Deleted Success!');
+        return response()->json(['result'=>'Department Deleted Success!']);
     }
 }

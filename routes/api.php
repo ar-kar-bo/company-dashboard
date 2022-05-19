@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\dummyAPI;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\PositionController;
+use App\Http\Controllers\API\DepartmentController;
+use App\Http\Controllers\API\dummyAPI;
+use App\Http\Controllers\API\EmployeeController;
+use App\Http\Controllers\API\PageController;
+use App\Http\Controllers\API\PositionController;
 use App\Models\City;
 use App\Models\Employee;
 use App\Models\Position;
@@ -26,8 +27,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/employee_list/search', [PageController::class,'search']);
+// Route::get('/employee_list/search', [PageController::class,'search']);
+// Route::get('/employee_list/department/{department_id}',[PageController::class,'byDepartment']);
 Route::get('/employee_list/department/{department_id}',[PageController::class,'byDepartment']);
+
 Route::get('/employee_edit/eduction/{education_id}',[PageController::class,'destoryEducation']);
 Route::get('/employee_edit/department/{department_id}',[PageController::class,'destoryWorkHistory']);
 
