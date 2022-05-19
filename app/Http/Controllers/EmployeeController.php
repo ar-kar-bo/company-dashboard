@@ -11,6 +11,7 @@ use App\Models\State;
 use App\Models\WorkHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use stdClass;
 
 class EmployeeController extends Controller
@@ -23,8 +24,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::with('position')->get();
-        $department = Department::all();
-        return view('dashboard.employee.index',compact('employees','department'));
+        return response()->json($employees);
     }
 
     /**
@@ -34,9 +34,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $states = State::all();
-        $dep = Department::all();
-        return view('dashboard.employee.create',compact('dep','states'));
+        //
     }
 
     /**
@@ -49,24 +47,8 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-/*
-        $work_history = [];
-
-        for($i=0;$i<count($request->work_history_position);$i++)
-        {
-            $work_history[$i] = new stdClass();
-            $work_history[$i]->position = $request->work_history_position[$i];
-            $work_history[$i]->company = $request->work_history_company_name[$i];
-            $work_history[$i]->start_date = $request->work_history_start_date[$i];
-            $work_history[$i]->end_date = $request->work_history_end_date[$i];
-        $work_history = [];
-        return $work_history;
-
-
- */
         // return $request;
-
-        $request->validate([
+        $rules = array(
             'name'=>'required',
             'email'=>'required',
             'phone'=>'required',
@@ -76,80 +58,72 @@ class EmployeeController extends Controller
             'image'=>'required|mimes:png,jpg,jpeg,ico,svg',
             'dob'=>'required',
             'position_id'=>"required",
-
-        ]);
-        $state = State::find($request->state)->name;
-        $city = City::find($request->city)->name;
-
-        $file = $request->file('image');
-        $file_name = uniqid(time()).$file->getClientOriginalName();
-        $file_path = 'images/'.$file_name;
-        $file->storeAs('images',$file_name);
-        $employee = Employee::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'state'=>$state,
-            'city'=>$city,
-            'address'=>$request->address,
-            'photo'=>$file_path,
-            'dob'=>$request->dob,
-            'position_id'=>$request->position_id,
-            'skill'=>$request->skill
-        ]);
-
-
-
-        for($i=0;$i<count($request->work_history_position);$i++)
+            'work_histories.*.position'=>"required",
+            'work_histories.*.company'=>"required",
+            'work_histories.*.start_date'=>"required",
+            'work_histories.*.end_date'=>"required",
+            'work_histories.*.description'=>"required",
+            'education.*.school'=>"required",
+            'education.*.degree'=>"required",
+            'education.*.start_date'=>"required",
+            'education.*.end_date'=>"required",
+            'education.*.note'=>"required",
+        );
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails())
         {
-            if($request->work_history_position[$i] && $request->work_history_company_name[$i] && $request->work_history_start_date[$i] && $request->work_history_end_date[$i])
+            return response()->json($validator->errors());
+        }else{
+            $state = State::find($request->state)->name;
+            $city = City::find($request->city)->name;
+
+            $file = $request->file('image');
+            $file_name = uniqid(time()).$file->getClientOriginalName();
+            $file_path = 'images/'.$file_name;
+            $file->storeAs('images',$file_name);
+            $file_path = 'something';
+            $employee = Employee::create([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'phone'=>$request->phone,
+                'state'=>$request->state,
+                'city'=>$request->city,
+                'address'=>$request->address,
+                'photo'=>$file_path,
+                'dob'=>$request->dob,
+                'position_id'=>$request->position_id,
+                'skill'=>$request->skill
+            ]);
+            if($employee)
             {
-                WorkHistory::create([
-                    'employee_id'=> $employee->id,
-                    'position'  =>  $request->work_history_position[$i],
-                    'company'   =>  $request->work_history_company_name[$i],
-                    'start_date'=>  $request->work_history_start_date[$i],
-                    'end_date'  =>  $request->work_history_end_date[$i],
-                    'description'  =>  $request->work_history_description[$i]
-                ]);
+                foreach($request->work_histories as $wh)
+                {
+                    WorkHistory::create([
+                        'employee_id'=>$employee->id,
+                        'position'=>$wh->position,
+                        'company'=>$wh->company,
+                        'start_date'=>$wh->start_date,
+                        'end_date'=>$wh->end_date,
+                        'description'=>$wh->description
+                    ]);
+                }
+
+                foreach($request->education as $edu)
+                {
+                    Education::create([
+                        'employee_id'   => $employee->id,
+                        'school'        =>  $edu->school,
+                        'degree'        =>  $edu->degree,
+                        'start_date'    =>  $edu->start_date,
+                        'end_date'      =>  $edu->end_date,
+                        'note'          =>  $edu->note
+                    ]);
+                }
+                return ['result'=>"Employee has been Created!"];
             }else{
-                // $bug = new stdClass();
-                // $bug->wh_position = $request->work_history_position[$i];
-                // $bug->wh_company_name = $request->work_history_company_name[$i];
-                // $bug->wh_start_date = $request->work_history_start_date[$i];
-                // $bug->wh_end_date = $request->work_history_end_date[$i];
-                // $bug->wh_description      =   $request->work_history_description[$i];
-                return redirect()->back()->with('warning','Fill WorkHistory Form To Complete!');
+                return ['result'=>"Employee created has been failed!"];
             }
         }
-
-        for($i=0;$i<count($request->edu_school);$i++)
-        {
-            if($request->edu_school[$i] && $request->edu_degree[$i] && $request->edu_start_date[$i] && $request->edu_end_date[$i])
-            {
-                $education = Education::create([
-                    'employee_id'   => $employee->id,
-                    'school'        =>  $request->edu_school[$i],
-                    'degree'        =>  $request->edu_degree[$i],
-                    'start_date'    =>  $request->edu_start_date[$i],
-                    'end_date'      =>  $request->edu_end_date[$i],
-                    'note'          =>  $request->edu_note[$i]
-                ]);
-            }else{
-                // $bug = new stdClass();
-                // $bug->edu_school = $request->edu_school[$i];
-                // $bug->edu_degree = $request->edu_degree[$i];
-                // $bug->edu_start_date = $request->edu_start_date[$i];
-                // $bug->edu_end_date = $request->edu_end_date[$i];
-                // $bug->edu_note      =   $request->edu_note[$i];
-                return redirect()->back()->with('warning','Fill Education Form To Complete!');
-            }
-        }
-
-
-
-
-        return redirect(route('employee.index'))->with('success','Employee Created Success!');
     }
 
     /**
@@ -160,12 +134,13 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-
         $employee = Employee::with('position')->where('id',$employee->id)->first();
         $employee->work_history = WorkHistory::where('employee_id',$employee->id)->get();
         $employee->education = Education::where('employee_id',$employee->id)->get();
-        $employee->department = Position::with('department')->where('id',$employee->position_id)->first()->department->name;
-        return view('dashboard.employee.show',compact('employee'));
+        $employee->department = Position::with('department')->where('id',$employee->position_id)->first()->department;
+        $employee->department_id = $employee->department->id;
+        $employee->position =Position::where('id',$employee->position_id)->first();
+        return response()->json($employee);
     }
 
     /**
@@ -176,17 +151,16 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        $dep = Department::with('position')->get();
-        $states = State::all();
+        return $employee->id;
 
-        $employee = Employee::where('id',$employee->id)->first();
-        $employee->work_history = WorkHistory::where('employee_id',$employee->id)->get();
-        $employee->education = Education::where('employee_id',$employee->id)->get();
-        $employee->city_id = City::where('name',$employee->city)->first()->id;
-        $employee->state_id = State::where('name',$employee->state)->first()->id;
+        // $employee = Employee::where('id',$employee->id)->first();
+        // $employee->work_history = WorkHistory::where('employee_id',$employee->id)->get();
+        // $employee->education = Education::where('employee_id',$employee->id)->get();
+        // $employee->city_id = City::where('name',$employee->city)->first()->id;
+        // $employee->state_id = State::where('name',$employee->state)->first()->id;
 
-        $dep_id = Position::with('department')->where('id',$employee->position_id)->first()->department_id;
-        return view('dashboard.employee.edit',compact('employee','dep','dep_id','states'));
+        // $dep_id = Position::with('department')->where('id',$employee->position_id)->first()->department_id;
+        // return view('dashboard.employee.edit',compact('employee','dep','dep_id','states'));
     }
 
     /**
@@ -198,94 +172,106 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        if(isset($request->work_history_id))
+        $rules = array(
+            'name'=>'required',
+            'email'=>'required',
+            'phone'=>'required',
+            'state'=>'required',
+            'city'=>'required',
+            'address'=>'required',
+            'image'=>'required|mimes:png,jpg,jpeg,ico,svg',
+            'dob'=>'required',
+            'position_id'=>"required",
+            'work_histories.*.position'=>"required",
+            'work_histories.*.company'=>"required",
+            'work_histories.*.start_date'=>"required",
+            'work_histories.*.end_date'=>"required",
+            'work_histories.*.description'=>"required",
+            'education.*.school'=>"required",
+            'education.*.degree'=>"required",
+            'education.*.start_date'=>"required",
+            'education.*.end_date'=>"required",
+            'education.*.note'=>"required",
+        );
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails())
         {
-            for($i=0;$i<count($request->work_history_id);$i++)
+            return response()->json($validator->errors());
+        }else{
+            $employee = Employee::find($employee->id);
+            if($request->file('image')){
+                if($employee->photo){
+                    $image_arr = explode('/',$employee->photo);
+                    Storage::disk('images')->delete($image_arr[1]);
+                }
+                $file = $request->file('image');
+                $file_name = uniqid(time()).$file->getClientOriginalName();
+                $file_path = 'images/'.$file_name;
+                $file->storeAs('images',$file_name);
+            }else{
+                $file_path = $employee->photo;
+            }
+            Employee::where('id',$employee->id)->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'phone'=>$request->phone,
+                'state'=>$request->state,
+                'city'=>$request->city,
+                'address'=>$request->address,
+                'photo'=>$file_path,
+                'dob'=>$request->dob,
+                'position_id'=>$request->position_id,
+                'skill'=>$request->skill,
+            ]);
+
+            foreach($request->work_histories as $wh)
             {
-                if(isset($request->work_history_id[$i]))
+                if(isset($wh->id))
                 {
-                    WorkHistory::where('id',$request->work_history_id[$i])->update([
-                        'company'=>$request->work_history_company_name[$i],
-                        'position'=>$request->work_history_position[$i],
-                        'start_date'=>$request->work_history_start_date[$i],
-                        'end_date'=>$request->work_history_end_date[$i],
-                        'description'=>$request->work_history_description[$i]
+                    WorkHistory::where('id',$wh->id)->update([
+                        'company'=>$wh->company,
+                        'position'=>$wh->position,
+                        'start_date'=>$wh->start_date,
+                        'end_date'=>$wh->end_date,
+                        'description'=>$wh->description
                     ]);
                 }else{
                     WorkHistory::create([
                         'employee_id'=>$employee->id,
-                        'company'=>$request->work_history_company_name[$i],
-                        'position'=>$request->work_history_position[$i],
-                        'start_date'=>$request->work_history_start_date[$i],
-                        'end_date'=>$request->work_history_end_date[$i],
-                        'description'=>$request->work_history_description[$i]
+                        'company'=>$wh->company,
+                        'position'=>$wh->position,
+                        'start_date'=>$wh->start_date,
+                        'end_date'=>$wh->end_date,
+                        'description'=>$wh->description
                     ]);
                 }
             }
-        }
-        if(isset($request->education_id))
-        {
-            for($i=0;$i<count($request->education_id);$i++)
+            foreach($request->educations as $edu)
             {
-                if(isset($request->education_id[$i]))
+                if(isset($edu->id))
                 {
-                    Education::where('id',$request->edu_id[$i])->update([
-                        'school'=>$request->edu_school[$i],
-                        'degree'=>$request->edu_degree[$i],
-                        'start_date'=>$request->edu_start_date[$i],
-                        'end_date'=>$request->edu_end_date[$i],
-                        'note'=>$request->edu_note[$i]
+                    Education::where('id',$wh->id)->update([
+                        'school'=>$edu->school,
+                        'degree'=>$edu->degree,
+                        'start_date'=>$edu->start_date,
+                        'end_date'=>$edu->end_date,
+                        'note'=>$edu->note
                     ]);
                 }else{
-
                     Education::create([
                         'employee_id'=>$employee->id,
-                        'school'=>$request->edu_school[$i],
-                        'degree'=>$request->edu_degree[$i],
-                        'start_date'=>$request->edu_start_date[$i],
-                        'end_date'=>$request->edu_end_date[$i],
-                        'note'=>$request->edu_note[$i]
+                        'school'=>$edu->school,
+                        'degree'=>$edu->degree,
+                        'start_date'=>$edu->start_date,
+                        'end_date'=>$edu->end_date,
+                        'note'=>$edu->note
                     ]);
                 }
             }
-        }
-        $request->validate([
-            'name'=>'required',
-            'email'=>'required',
-            'phone'=>'required',
-            'address'=>'required',
-            'image'=>'mimes:png,jpg,jpeg,ico',
-            'dob'=>'required',
-            'position_id'=>"required",
-            'skill'=>'required'
+            return ['result'=>"Employee updated success!"];
 
-        ]);
-        $employee = Employee::find($employee->id);
-        if($request->file('image')){
-            if($employee->photo){
-                $image_arr = explode('/',$employee->photo);
-                Storage::disk('images')->delete($image_arr[1]);
-            }
-            $file = $request->file('image');
-            $file_name = uniqid(time()).$file->getClientOriginalName();
-            $file_path = 'images/'.$file_name;
-            $file->storeAs('images',$file_name);
-        }else{
-            $file_path = $employee->photo;
         }
-        Employee::where('id',$employee->id)->update([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'state'=>$request->state,
-            'city'=>$request->city,
-            'address'=>$request->address,
-            'photo'=>$file_path,
-            'dob'=>$request->dob,
-            'position_id'=>$request->position_id,
-            'skill'=>$request->skill,
-        ]);
-        return redirect()->back()->with('success','Employee Updated Success!');
+
     }
 
     /**
@@ -296,9 +282,9 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        $image_arr = explode('/',$employee->photo);
-        Storage::disk('images')->delete($image_arr[1]);
-        Employee::where('id',$employee->id)->delete();
-        return redirect()->back()->with('success','Employee Deleted Success!');
+        // $image_arr = explode('/',$employee->photo);
+        // Storage::disk('images')->delete($image_arr[1]);
+        // Employee::where('id',$employee->id)->delete();
+        // return redirect()->back()->with('success','Employee Deleted Success!');
     }
 }

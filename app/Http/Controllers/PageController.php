@@ -18,10 +18,9 @@ class PageController extends Controller
 
     public function search(Request $request)
     {
-        $department = Department::all();
         $search = $request->search;
-        $employees = Employee::where('name','like',"%{$search}%")->latest()->get();
-        return view('dashboard.employee.index',compact('employees','department'));
+        $employees = Employee::with("position")->where('name','like',"%{$search}%")->latest()->get();
+        return response()->json($employees);
     }
 
     public function byDepartment($department_id)
@@ -38,12 +37,12 @@ class PageController extends Controller
     public function destoryEducation($education_id)
     {
         Education::where('id',$education_id)->delete();
-        return redirect()->back()->with('success','Deleted Education of Employee!');
+        return ['success'=>'Deleted Education of Employee!'];
     }
 
     public function destoryWorkHistory($work_history_id)
     {
         WorkHistory::where('id',$work_history_id)->delete();
-        return redirect()->back()->with('success','Deleted Work History of Employee!');
+        return ['success'=>'Deleted Work History of Employee!'];
     }
 }

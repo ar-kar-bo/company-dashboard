@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DepartmentController extends Controller
 {
@@ -15,7 +16,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $departments = Department::all();
-        return view('dashboard.department.index',compact('departments'));
+        return response()->json($departments);
     }
 
     /**
@@ -25,7 +26,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('dashboard.department.create');
+        //
     }
 
     /**
@@ -36,13 +37,28 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+
+        $rules = array(
             'name'=>'required',
-        ]);
-        Department::create([
-            'name'=>$request->name
-        ]);
-        return redirect(route('department.index'))->with('success','Department Created Success!');
+        );
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            // return $validator->errors();
+            return response()->json($validator->errors(),401);
+        }else{
+            $department = new Department();
+            $department->name = $request->name;
+            $result = $department->save();
+            if($result)
+            {
+                return ['result'=>'Department Created Success!'];
+            }else{
+                return ['result'=>'Department create operation has been failed!'];
+            }
+        }
+
+
     }
 
     /**
@@ -51,9 +67,10 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Department $department)
     {
-        //
+        $department = Department::find($department->id);
+        return response()->json($department);
     }
 
     /**
@@ -65,7 +82,7 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::find($id);
-        return view('dashboard.department.edit',compact('department'));
+        return response()->json($department);
     }
 
     /**
@@ -77,13 +94,24 @@ class DepartmentController extends Controller
      */
     public function update(Request $request,$id)
     {
-        $request->validate([
+        $rules = array(
             'name'=>'required'
-        ]);
-        Department::where('id',$id)->update([
-            'name'=>$request->name
-        ]);
-        return redirect()->back()->with('success','Department Updated Success!');
+        );
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            return response()->json($validator->errors());
+        }else{
+            $department = Department::find($id);
+            $department->name = $request->name;
+            $result = $department->save();
+            if($result)
+            {
+                return ['result'=>"Department Updated Success!"];
+            }else{
+                return ['result'=>'Update Operation has been failed!'];
+            }
+        }
     }
 
     /**
@@ -95,6 +123,6 @@ class DepartmentController extends Controller
     public function destroy($id)
     {
         Department::where('id',$id)->delete();
-        return redirect()->back()->with('success','Department Deleted Success!');
+        return response()->json(['result'=>'Department Deleted Success!']);
     }
 }
