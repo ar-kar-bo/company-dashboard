@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PositionController extends Controller
 {
@@ -17,7 +18,7 @@ class PositionController extends Controller
     public function index()
     {
         $positions = Position::with('department')->get();
-        return view('dashboard.position.index',compact('positions'));
+        return response()->json($positions);
     }
 
     /**
@@ -27,8 +28,7 @@ class PositionController extends Controller
      */
     public function create()
     {
-        $deps = Department::all();
-        return view('dashboard.position.create',compact('deps'));
+        //
     }
 
     /**
@@ -39,17 +39,28 @@ class PositionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $rules = array(
             'name'=>'required',
             'salary'=>'required',
             'department_id'=>'required'
-        ]);
-        Position::create([
-            'name'=>$request->name,
-            'salary'=>$request->salary,
-            'department_id'=>$request->department_id
-        ]);
-        return redirect(route('position.index'))->with('success','Position Created Success!');
+        );
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            return response()->json($validator->errors());
+        }else{
+            $position = new Position();
+            $position->name = $request->name;
+            $position->salary = $request->salary;
+            $position->department_id = $request->department_id;
+            $result = $position->save();
+            if($result)
+            {
+                return ['result'=>'Position Created Success!'];
+            }else{
+                return ['result'=>'Create position failed!'];
+            }
+        }
     }
 
     /**
@@ -69,12 +80,10 @@ class PositionController extends Controller
      * @param  \App\Models\Position  $position
      * @return \Illuminate\Http\Response
      */
-    public function edit(Position $position)
+    public function edit($id)
     {
-        $deps = Department::all();
-        $position = Position::where('id',$position->id)->with('department')->first();
-        return view('dashboard.position.edit',compact('deps','position'));
-
+        $position = Position::where('id',$id)->with('department')->first();
+        return response()->json($position);
     }
 
     /**
@@ -86,18 +95,28 @@ class PositionController extends Controller
      */
     public function update(Request $request, Position $position)
     {
-        $request->validate([
+        $rules = array(
             'name'=>'required',
             'salary'=>'required',
             'department_id'=>'required'
-        ]);
-
-        Position::where('id',$position->id)->update([
-            'name'=>$request->name,
-            'salary'=>$request->salary,
-            'department_id'=>$request->department_id
-        ]);
-        return redirect()->back()->with('success','Position Updated Success!');
+        );
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails())
+        {
+            return response()->json($validator->errors());
+        }else{
+            $position = Position::find($position->id);
+            $position->name = $request->name;
+            $position->salary = $request->salary;
+            $position->department_id = $request->department_id;
+            $result = $position->save();
+            if($result)
+            {
+                return ['result','Position Created Success!'];
+            }else{
+                return ['result','Create position failed!'];
+            }
+        }
     }
 
     /**
@@ -109,6 +128,6 @@ class PositionController extends Controller
     public function destroy(Position $position)
     {
         Position::where('id',$position->id)->delete();
-        return redirect()->back()->with('success','Position Deleted Success');
+        return response()->json(['result'=>'Position Deleted Success']);
     }
 }
