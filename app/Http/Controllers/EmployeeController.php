@@ -188,7 +188,27 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Employee $employee)
-    {
+    {   $request->validate([
+        'name'=>'required',
+        'email'=>'required',
+        'phone'=>'required',
+        'state'=>'required',
+        'city'=>'required',
+        'address'=>'required',
+        'image'=>'required|mimes:png,jpg,jpeg,ico,svg',
+        'dob'=>'required',
+        'position_id'=>"required",
+        'work_history_position.*'=>"required",
+        'work_history_company.*'=>"required",
+        'work_history_start_date.*'=>"required",
+        'work_history_end_date.*'=>"required",
+        'work_history_description.*'=>"required",
+        'edu_school.*'=>"required",
+        'edu_degree.*'=>"required",
+        'edu_start_date.*'=>"required",
+        'edu_end_date.*'=>"required",
+        'edu_note.*'=>"required",
+    ]);
         if(isset($request->work_history_id))
         {
             for($i=0;$i<count($request->work_history_id);$i++)
@@ -240,17 +260,7 @@ class EmployeeController extends Controller
                 }
             }
         }
-        $request->validate([
-            'name'=>'required',
-            'email'=>'required',
-            'phone'=>'required',
-            'address'=>'required',
-            'image'=>'mimes:png,jpg,jpeg,ico',
-            'dob'=>'required',
-            'position_id'=>"required",
-            'skill'=>'required'
-
-        ]);
+     
         $employee = Employee::find($employee->id);
         if($request->file('image')){
             if($employee->photo){
