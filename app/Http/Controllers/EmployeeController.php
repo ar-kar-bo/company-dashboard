@@ -93,53 +93,29 @@ class EmployeeController extends Controller
 
         for($i=0;$i<count($request->work_history_position);$i++)
         {
-            if($request->work_history_position[$i] && $request->work_history_company_name[$i] && $request->work_history_start_date[$i] && $request->work_history_end_date[$i])
-            {
-                WorkHistory::create([
-                    'employee_id'=> $employee->id,
-                    'position'  =>  $request->work_history_position[$i],
-                    'company'   =>  $request->work_history_company_name[$i],
-                    'start_date'=>  $request->work_history_start_date[$i],
-                    'end_date'  =>  $request->work_history_end_date[$i],
-                    'description'  =>  $request->work_history_description[$i]
-                ]);
-            }else{
-                // $bug = new stdClass();
-                // $bug->wh_position = $request->work_history_position[$i];
-                // $bug->wh_company_name = $request->work_history_company_name[$i];
-                // $bug->wh_start_date = $request->work_history_start_date[$i];
-                // $bug->wh_end_date = $request->work_history_end_date[$i];
-                // $bug->wh_description      =   $request->work_history_description[$i];
-                return redirect()->back()->with('warning','Fill WorkHistory Form To Complete!');
-            }
+
+            WorkHistory::create([
+                'employee_id'=> $employee->id,
+                'position'  =>  $request->work_history_position[$i],
+                'company'   =>  $request->work_history_company_name[$i],
+                'start_date'=>  $request->work_history_start_date[$i],
+                'end_date'  =>  $request->work_history_end_date[$i],
+                'description'  =>  $request->work_history_description[$i]
+            ]);
         }
 
         for($i=0;$i<count($request->edu_school);$i++)
         {
-            if($request->edu_school[$i] && $request->edu_degree[$i] && $request->edu_start_date[$i] && $request->edu_end_date[$i])
-            {
-                $education = Education::create([
-                    'employee_id'   => $employee->id,
-                    'school'        =>  $request->edu_school[$i],
-                    'degree'        =>  $request->edu_degree[$i],
-                    'start_date'    =>  $request->edu_start_date[$i],
-                    'end_date'      =>  $request->edu_end_date[$i],
-                    'note'          =>  $request->edu_note[$i]
-                ]);
-            }else{
-                // $bug = new stdClass();
-                // $bug->edu_school = $request->edu_school[$i];
-                // $bug->edu_degree = $request->edu_degree[$i];
-                // $bug->edu_start_date = $request->edu_start_date[$i];
-                // $bug->edu_end_date = $request->edu_end_date[$i];
-                // $bug->edu_note      =   $request->edu_note[$i];
-                return redirect()->back()->with('warning','Fill Education Form To Complete!');
-            }
+
+            Education::create([
+                'employee_id'   => $employee->id,
+                'school'        =>  $request->edu_school[$i],
+                'degree'        =>  $request->edu_degree[$i],
+                'start_date'    =>  $request->edu_start_date[$i],
+                'end_date'      =>  $request->edu_end_date[$i],
+                'note'          =>  $request->edu_note[$i]
+            ]);
         }
-
-
-
-
         return redirect(route('employee.index'))->with('success','Employee Created Success!');
     }
 
@@ -260,7 +236,7 @@ class EmployeeController extends Controller
                 }
             }
         }
-     
+
         $employee = Employee::find($employee->id);
         if($request->file('image')){
             if($employee->photo){
